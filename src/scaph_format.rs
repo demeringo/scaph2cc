@@ -2,11 +2,11 @@ use serde_derive::Deserialize;
 use serde_derive::Serialize;
 use serde_json::Value;
 
-pub type Root = Vec<Root2>;
+pub type Results = Vec<Measure>;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Root2 {
+pub struct Measure {
     pub host: Host,
     pub consumers: Vec<Consumer>,
     pub sockets: Vec<Value>,
