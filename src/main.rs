@@ -1,32 +1,10 @@
-use serde::Deserialize;
 use std::fs::File;
 use std::path::Path;
 mod cc_format;
 use crate::cc_format::CarbonCrushResult;
 
 mod scaph_reader;
-use crate::scaph_reader::read_scaph_file;
-
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
-struct User {
-    username: String,
-    first_name: String,
-    last_name: String,
-    email: String,
-}
-
-fn show_users(filename: &str) {
-    let json_file_path = Path::new(filename);
-    let file = File::open(json_file_path).expect("file not found");
-    let users: Vec<User> = serde_json::from_reader(file).expect("error while reading");
-    for user in users {
-        println!(
-            "Hello {} aka {} {} {}",
-            user.username, user.first_name, user.last_name, user.email
-        )
-    }
-}
+mod user_reader;
 
 fn read_cc_file(filename: &str) -> CarbonCrushResult {
     let json_file_path = Path::new(filename);
@@ -43,10 +21,26 @@ fn print_cc_file(ccres: CarbonCrushResult) {
 }
 
 fn main() {
-    show_users("./tests/sample-users.json");
+    user_reader::show_users("./tests/sample-users.json");
 
     let ccres = read_cc_file("./tests/measure-summary.json");
     print_cc_file(ccres);
 
-    read_scaph_file();
+    scaph_reader::read_scaph_file();
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::scaph_reader;
+
+    #[test]
+    fn test_reading_scaphandre_full_report() {
+        scaph_reader::read_scaph_file();
+    }
+
+    #[test]
+    fn test_reading_carbon_crush_results() {
+        super::read_cc_file("./tests/measure-summary.json");
+    }
 }
