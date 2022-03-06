@@ -26,7 +26,7 @@ fn main() {
     let ccres = read_cc_file("./tests/measure-summary.json");
     print_cc_file(ccres);
 
-    scaph_reader::read_scaph_file();
+    scaph_reader::read_scaph_file("./tests/scaphandre-full-report.json");
 }
 
 
@@ -36,7 +36,7 @@ mod tests {
 
     #[test]
     fn test_reading_scaphandre_full_report() {
-        scaph_reader::read_scaph_file();
+        scaph_reader::read_scaph_file("./tests/scaphandre-full-report.json");
     }
 
     #[test]
