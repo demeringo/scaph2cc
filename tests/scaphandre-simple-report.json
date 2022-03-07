@@ -1,0 +1,80 @@
+[
+  {
+    "host": { "consumption": 3147396.0, "timestamp": 1646408463.9169478 },
+    "consumers": [
+      {
+        "exe": "gnome-shell",
+        "pid": 3396,
+        "consumption": 246613.0,
+        "timestamp": 1646408463.924067
+      },
+      {
+        "exe": "code",
+        "pid": 4861,
+        "consumption": 246613.0,
+        "timestamp": 1646408463.9241598
+      },
+      {
+        "exe": "Xorg",
+        "pid": 3107,
+        "consumption": 184960.0,
+        "timestamp": 1646408463.924036
+      }
+    ],
+    "sockets": []
+  },
+  {
+    "host": { "consumption": 10426730.0, "timestamp": 1646408474.2537138 },
+    "consumers": [
+      {
+        "exe": "stress-ng",
+        "pid": 29547,
+        "consumption": 9159386.0,
+        "timestamp": 1646408474.2579904
+      },
+      {
+        "exe": "gnome-shell",
+        "pid": 3396,
+        "consumption": 179595.0,
+        "timestamp": 1646408474.257879
+      },
+      {
+        "exe": "code",
+        "pid": 16697,
+        "consumption": 179595.0,
+        "timestamp": 1646408474.2579572
+      },
+      {
+        "exe": "scaphandre",
+        "pid": 29544,
+        "consumption": 179595.0,
+        "timestamp": 1646408474.257989
+      }
+    ],
+    "sockets": []
+  },
+  {
+    "host": { "consumption": 8672140.0, "timestamp": 1646408475.2722964 },
+    "consumers": [
+      {
+        "exe": "stress-ng",
+        "pid": 29547,
+        "consumption": 7132186.0,
+        "timestamp": 1646408475.2765117
+      }
+    ],
+    "sockets": []
+  },
+  {
+    "host": { "consumption": 8166204.0, "timestamp": 1646408476.2904851 },
+    "consumers": [
+      {
+        "exe": "stress-ng",
+        "pid": 29547,
+        "consumption": 7311990.0,
+        "timestamp": 1646408476.2947628
+      }
+    ],
+    "sockets": []
+  }
+]
