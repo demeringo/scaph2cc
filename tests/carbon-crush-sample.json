@@ -1,0 +1,9 @@
+{
+  "consumption": "7269278.142857143",
+  "duration" : "10.00",
+  "appId": "123",
+  "branch": "master",
+  "ciPipelineUrl": "http://ci.com/master/123456",
+  "commitSha":"d50e3b5ed5c27a848008abd5beb3d9e6c37c3f33",
+  "energy" : "72692781.42857143"
+}
