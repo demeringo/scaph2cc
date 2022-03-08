@@ -1,10 +1,20 @@
 # scaph2cc
 
-A small utility to filter and convert Scaphandre json output to a format suitable for CarbonCrush.
+A small utility to filter and convert ⚡ Scaphandre json output to a format suitable for 🌳 CarbonCrush API.
 
 ## Usage
 
-Provide the relevant process name that you want to use to filter the results.
+The CLI expects that you provide:
+- the scaphandre json analysis file as input
+- the name of the file to be generated
+- the process name that you want to use to filter the input file
+- additional carbon crush metadata:
+  - application id
+  - ci branch measured
+  - url of the current ci pipeline
+  - commit id 
+
+It returns a json summary file that can be ingested by CarbonCrush API.
 
 ```bash
 cargo run -- -i tests/scaphandre-full-report.json -o tests/carbon-crush-data.json --app-id myapp-123 --branch master --ci-pipeline-url "http://ci.com/master/123456" --process-name stress-ng --commit-sha d50e3b5ed5c27a848008abd5beb3d9e6c37c3f33
@@ -33,7 +43,7 @@ OPTIONS:
  olivier@pad  ~/atelier/scaph/scaph2cc 
 ```
 
-## Carbon Crush Format
+### Carbon Crush input Format
 
 ```json
 {
@@ -46,3 +56,10 @@ OPTIONS:
   "energy" : "72692781.42857143"
 }
 ```
+## Usage in CI
+
+scaph2cc is included in the [scaphandre-node-ci docker image](https://github.com/demeringo/scaphandre-node-ci/)
+
+## Thanks
+
+🌳 _All credits go to the Scaphandre project and its great communitity_: <https://github.com/hubblo-org/scaphandre>
