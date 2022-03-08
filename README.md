@@ -1,6 +1,6 @@
 # scaph2cc
 
-A small utility to filter and convert ⚡ Scaphandre json output to a format suitable for 🌳 CarbonCrush API.
+A small utility to filter and convert ⚡ [Scaphandre](https://github.com/hubblo-org/scaphandre) json exporter output to a format suitable for 🌳 CarbonCrush API.
 
 ## Usage
 
