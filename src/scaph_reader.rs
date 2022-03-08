@@ -32,7 +32,7 @@ pub struct Consumer {
 }
 
 pub fn read_scaph_file(filename: &str) -> ScaphResults {
-    println!("reading scaph file");
+    //println!("reading scaph file {}", filename);
     let json_file_path = Path::new(filename);
     let file = File::open(json_file_path).expect("file not found");
     let results: ScaphResults = serde_json::from_reader(file).expect("error while reading");
@@ -49,8 +49,12 @@ pub fn mean(data: Vec<f64>) -> Option<f64> {
     }
 }
 
-pub fn average_consumption(filename: &str, process_name: &str) -> f64 {
-    let scaph_results: ScaphResults = read_scaph_file(filename);
+pub fn average_consumption(scaphandre_file_name: &str, process_name: &str) -> f64 {
+    println!(
+        "Calculating average consumption of process[{}] from file[{}]",
+        process_name, scaphandre_file_name
+    );
+    let scaph_results: ScaphResults = read_scaph_file(scaphandre_file_name);
     let mut consumptions: Vec<f64> = Vec::new();
 
     for meas in scaph_results {
@@ -60,18 +64,22 @@ pub fn average_consumption(filename: &str, process_name: &str) -> f64 {
             }
         }
     }
-
     match mean(consumptions) {
         Some(res) => res,
         None => panic!("Cannot calculate mean consumption"),
     }
 }
 
-pub fn process_duration_seconds(filename: &str, process_name: &str) -> f64 {
+pub fn process_duration_seconds(scaphandre_file_name: &str, process_name: &str) -> f64 {
+    println!(
+        "Extracting duration consumption of process: {} from file[{}]",
+        process_name,
+        scaphandre_file_name
+    );
     let mut first_timestamp: f64 = 0.0;
     let mut last_timestamp: f64 = 0.0;
 
-    let scaph_results: ScaphResults = read_scaph_file(filename);
+    let scaph_results: ScaphResults = read_scaph_file(scaphandre_file_name);
 
     for meas in scaph_results {
         for proc in meas.consumers {
@@ -143,12 +151,12 @@ mod tests {
 
     #[test]
     fn test_average_consumption_small() {
-      let filename = "./tests/scaphandre-simple-report.json";
-      let process = "stress-ng";
+        let filename = "./tests/scaphandre-simple-report.json";
+        let process = "stress-ng";
 
-      let res: f64 = average_consumption(filename, process);
-      assert_eq!(res, 7867854.0 as f64);
-  }
+        let res: f64 = average_consumption(filename, process);
+        assert_eq!(res, 7867854.0 as f64);
+    }
 
     #[test]
     fn test_process_duration_small() {
@@ -159,7 +167,4 @@ mod tests {
 
         assert_eq!(duration_seconds_f64, 2.0367724895477295 as f64);
     }
-
-    
-
 }

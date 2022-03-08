@@ -23,13 +23,15 @@ pub fn read_cc_file(filename: &str) -> CarbonCrushResult {
 }
 
 pub fn print_cc_file(ccres: CarbonCrushResult) {
+    println!("Full results {:?}", ccres);
     println!(
-        "appid:{}  pipelineurl:{} value:{}",
+        "Extract: appid:{}  pipelineurl:{} value:{}",
         ccres.appid, ccres.cipipelineurl, ccres.value
     )
 }
 
 pub fn save_cc_file(carbon_crush_result: CarbonCrushResult, filename: &str) {
+    println!("Saving results: {:?} to {}", carbon_crush_result, filename);
     // Save the JSON structure into the other file.
     std::fs::write(
         filename,
@@ -51,7 +53,7 @@ pub fn build_cc_result(
         cicommitsha: "".to_string(),
         cijob: "".to_string(),
         cijoburl: "".to_string(),
-        cipipelineurl: cipipelineurl.to_string()
+        cipipelineurl: cipipelineurl.to_string(),
     }
 }
 
@@ -70,13 +72,14 @@ mod tests {
 
     #[test]
     fn test_save_cc_file() {
-        let filename = "test-generated-result";
-        let carbon_crush_result = build_cc_result(123.0, "myapp1", "main", "http://whatever/job/123");
+        let filename = "test-generated-result.json";
+        let carbon_crush_result =
+            build_cc_result(123.0, "myapp1", "main", "http://whatever/job/123");
         save_cc_file(carbon_crush_result, filename)
-        
     }
     #[test]
-    fn test_build_cc_result(){
-        let carbon_crush_result = build_cc_result(123.0, "myapp1", "main", "http://whatever/job/123");
+    fn test_build_cc_result() {
+        let _carbon_crush_result =
+            build_cc_result(123.0, "myapp1", "main", "http://whatever/job/123");
     }
 }

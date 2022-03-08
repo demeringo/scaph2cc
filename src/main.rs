@@ -13,10 +13,14 @@ fn main() {
     let process_name = "stress-ng";
 
     let average_consumption = scaph_reader::average_consumption(scaph_filename, process_name);
-    let duration = scaph_reader::process_duration_seconds(scaph_filename, process_name);
-    let total_energy = duration * average_consumption;
 
+    let duration = scaph_reader::process_duration_seconds(scaph_filename, process_name);
+
+    let total_energy = duration * average_consumption;
+    println!(
+        "Done: average consumption {}, duration: {}, total energy: {}",
+        average_consumption, duration, total_energy
+    );
     let carbon_crush_results = build_cc_result(average_consumption, app_id, branch, pipeline_url);
     save_cc_file(carbon_crush_results, cc_filename);
-    
 }
