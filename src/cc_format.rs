@@ -41,13 +41,13 @@ pub fn save_cc_file(carbon_crush_result: CarbonCrushResult, filename: &str) {
 }
 
 pub fn build_cc_result(
-    consumption: f64,
+    consumption: f32,
     app_id: &str,
     branch: &str,
     commit_sha: &str,
     ci_pipeline_url: &str,
-    energy: f64,
-    duration: f64,
+    energy: f32,
+    duration: f32,
 ) -> CarbonCrushResult {
     CarbonCrushResult {
         consumption: consumption.to_string(),
