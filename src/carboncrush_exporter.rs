@@ -1,7 +1,7 @@
+use std::path::PathBuf;
+
 use serde::Deserialize;
 use serde::Serialize;
-// use std::fs::File;
-// use std::path::Path;
 
 /// The structure that describe Carbon Crush input
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -16,25 +16,13 @@ pub struct CarbonCrushResult {
     pub ci_pipeline_url: String,
 }
 
-// pub fn read_cc_file(carbon_crush_json_file: &str) -> CarbonCrushResult {
-//     let json_file_path = Path::new(carbon_crush_json_file);
-//     let file = File::open(json_file_path).expect("file not found");
-//     let result: CarbonCrushResult = serde_json::from_reader(file).expect("error while reading");
-//     result
-// }
-
-// pub fn print_carboncrush_results(c: CarbonCrushResult) {
-//     println!("Full results {:?}", c);
-//     println!(
-//         "Extract: appid:{}  pipeline url:{} consumption:{}, energy {}, duration",
-//         c.app_id, c.ci_pipeline_url, c.consumption, c.duration
-//     )
-// }
-
 /// Save a carbon crush results as a file
-pub fn save_carboncrush_file(carbon_crush_result: CarbonCrushResult, carboncrush_json_file: &str) {
+pub fn save_carboncrush_file(
+    carbon_crush_result: CarbonCrushResult,
+    carboncrush_json_file: PathBuf,
+) {
     println!(
-        "Saving results: {:?} to {}",
+        "Saving results: {:?} to {:?}",
         carbon_crush_result, carboncrush_json_file
     );
     // Save the JSON structure into the other file.
@@ -46,7 +34,7 @@ pub fn save_carboncrush_file(carbon_crush_result: CarbonCrushResult, carboncrush
 }
 
 /// Build a carbon crush data structure with the passed values.
-/// 
+///
 pub fn build_carboncrush_result(
     consumption: f32,
     app_id: &str,
@@ -71,15 +59,6 @@ pub fn build_carboncrush_result(
 mod tests {
     use super::*;
 
-    // #[test]
-    // fn test_reading_carbon_crush_results() {
-    //     read_cc_file("./tests/carbon-crush-sample.json");
-    // }
-    // #[test]
-    // fn test_print_cc_file() {
-    //     print_cc_file(read_cc_file("./tests/carbon-crush-sample.json"));
-    // }
-
     #[test]
     fn test_build_cc_result() {
         let _carboncrush_result = build_carboncrush_result(
@@ -94,7 +73,7 @@ mod tests {
     }
     #[test]
     fn test_save_cc_file() {
-        let carboncrush_json_file = "test-generated-result.json";
+        let carboncrush_json_file = PathBuf::from("test-generated-result.json");
         let carboncrush_result = build_carboncrush_result(
             123.0,
             "myapp1",

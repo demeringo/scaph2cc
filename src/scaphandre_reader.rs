@@ -2,7 +2,6 @@ use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
 use std::fs::File;
-use std::path::Path;
 use std::path::PathBuf;
 
 /// The scaphandre  measure (in scaphandre json output)
@@ -34,10 +33,9 @@ pub struct Consumer {
 }
 
 /// Extracts Scaphandre measures from a scaphandre output file (json)
-pub fn read_scaph_file(scaphandre_json_file: &str) -> ScaphandreMeasures {
+pub fn read_scaph_file(scaphandre_json_file: &PathBuf) -> ScaphandreMeasures {
     //dbg!("Reading scaphandre file {:?}", scaphandre_json_file);
-    let json_file_path = Path::new(scaphandre_json_file);
-    let file = File::open(json_file_path).expect("file not found");
+    let file = File::open(scaphandre_json_file).expect("file not found");
     let results: ScaphandreMeasures = serde_json::from_reader(file).expect("error while reading");
     results
 }
@@ -53,9 +51,9 @@ fn average(data: Vec<f32>) -> Option<f32> {
     }
 }
 /// Calculate the average consumption of a given process name
-pub fn average_consumption(scaphandre_json_file: &str, process_name: &str) -> f32 {
+pub fn average_consumption(scaphandre_json_file: &PathBuf, process_name: &str) -> f32 {
     println!(
-        "Calculating average consumption of process[{}] from file[{}]",
+        "Calculating average consumption of process[{}] from file[{:?}]",
         process_name, scaphandre_json_file
     );
     let scaph_results: ScaphandreMeasures = read_scaph_file(scaphandre_json_file);
@@ -76,9 +74,9 @@ pub fn average_consumption(scaphandre_json_file: &str, process_name: &str) -> f3
 
 /// Extract the total duration of a given process by reading the scaphandre json output
 /// and calculating the difference between the first and last time the process is seen.
-pub fn process_duration_seconds(scaphandre_json_file: &str, process_name: &str) -> f32 {
+pub fn process_duration_seconds(scaphandre_json_file: &PathBuf, process_name: &str) -> f32 {
     println!(
-        "Extracting duration consumption of process: {} from file[{}]",
+        "Extracting duration consumption of process: {} from file[{:?}]",
         process_name, scaphandre_json_file
     );
     let mut first_timestamp: f64 = 0.0;
@@ -102,22 +100,24 @@ pub fn process_duration_seconds(scaphandre_json_file: &str, process_name: &str) 
 
 #[cfg(test)]
 mod tests {
-
     use super::*;
 
     #[test]
     fn test_reading_scaphandre_full_report() {
-        let measures: ScaphandreMeasures = read_scaph_file("./tests/scaphandre-full-report.json");
+        let scaphandre_json_file = PathBuf::from("./tests/scaphandre-full-report.json");
+        let measures: ScaphandreMeasures = read_scaph_file(&scaphandre_json_file);
         assert_eq!(measures.len(), 22);
     }
     #[test]
     fn test_reading_a_proc_name() {
-        let measures: ScaphandreMeasures = read_scaph_file("./tests/scaphandre-full-report.json");
+        let scaphandre_json_file = PathBuf::from("./tests/scaphandre-full-report.json");
+        let measures: ScaphandreMeasures = read_scaph_file(&scaphandre_json_file);
         assert_eq!(measures[20].consumers[1].exe, PathBuf::from("gnome-shell"));
     }
     #[test]
     fn test_reading_a_ts() {
-        let measures: ScaphandreMeasures = read_scaph_file("./tests/scaphandre-full-report.json");
+        let scaphandre_json_file = PathBuf::from("./tests/scaphandre-full-report.json");
+        let measures: ScaphandreMeasures = read_scaph_file(&scaphandre_json_file);
         assert_eq!(
             measures[20].consumers[1].timestamp,
             1646408484.4658008 as f64
@@ -149,29 +149,29 @@ mod tests {
     }
 
     #[test]
-    fn test_average_consumption() {
-        let scaphandre_json_file = "./tests/scaphandre-full-report.json";
+    fn test_average_consumption_full() {
+        let scaphandre_json_file = PathBuf::from("./tests/scaphandre-full-report.json");
         let process_name = "stress-ng";
 
-        let res: f32 = average_consumption(scaphandre_json_file, process_name);
+        let res: f32 = average_consumption(&scaphandre_json_file, process_name);
         assert_eq!(res, 7269277.5 as f32);
     }
 
     #[test]
-    fn test_average_consumption_small() {
-        let scaphandre_json_file = "./tests/scaphandre-simple-report.json";
+    fn test_average_consumption_simple() {
+        let scaphandre_json_file = PathBuf::from("./tests/scaphandre-simple-report.json");
         let process_name = "stress-ng";
 
-        let res: f32 = average_consumption(scaphandre_json_file, process_name);
+        let res: f32 = average_consumption(&scaphandre_json_file, process_name);
         assert_eq!(res, 7867854.0 as f32);
     }
 
     #[test]
-    fn test_process_duration_small() {
-        let scaphandre_json_file = "./tests/scaphandre-simple-report.json";
+    fn test_process_duration_simple() {
+        let scaphandre_json_file = PathBuf::from("./tests/scaphandre-simple-report.json");
         let process_name = "stress-ng";
 
-        let duration_seconds_f64 = process_duration_seconds(scaphandre_json_file, process_name);
+        let duration_seconds_f64 = process_duration_seconds(&scaphandre_json_file, process_name);
 
         assert_eq!(duration_seconds_f64, 2.0367724895477295 as f32);
     }

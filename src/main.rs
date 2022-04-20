@@ -7,6 +7,8 @@
 //! context.  
 
 mod carboncrush_exporter;
+use std::path::PathBuf;
+
 use crate::carboncrush_exporter::*;
 
 mod scaphandre_reader;
@@ -19,11 +21,11 @@ use clap::Parser;
 struct Args {
     /// Name of the scaphandre input file
     #[clap(short, long)]
-    input_file: String,
+    input_file: PathBuf,
 
     /// Name of the carbon crush file to generate
     #[clap(short, long)]
-    output_file: String,
+    output_file: PathBuf,
 
     /// The process name to filter
     #[clap(short, long)]
@@ -52,13 +54,14 @@ fn main() {
     let app_id = args.app_id.as_str();
     let branch = args.branch.as_str();
     let pipeline_url = args.ci_pipeline_url.as_str();
-    let scaphandre_json_file = args.input_file.as_str();
-    let carboncrush_json_file = args.output_file.as_str();
+    let scaphandre_json_file = args.input_file;
+    let carboncrush_json_file = args.output_file;
     let process_name = args.process_name.as_str();
     let commit_sha = args.commit_sha.as_str();
 
-    let average_consumption = scaphandre_reader::average_consumption(scaphandre_json_file, process_name);
-    let duration = scaphandre_reader::process_duration_seconds(scaphandre_json_file, process_name);
+    let average_consumption =
+        scaphandre_reader::average_consumption(&scaphandre_json_file, process_name);
+    let duration = scaphandre_reader::process_duration_seconds(&scaphandre_json_file, process_name);
 
     let total_energy = average_consumption * duration;
     println!(
