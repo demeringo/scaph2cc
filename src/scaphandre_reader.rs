@@ -4,10 +4,13 @@ use serde_json::Value;
 use std::fs::File;
 use std::path::PathBuf;
 
-/// The scaphandre  measure (in scaphandre json output)
+/// A vector of all Scaphandre measures
+/// 
+/// This is the equivalent of Scaphandre json exporter output.
 pub type ScaphandreMeasures = Vec<Measure>;
 
-/// The structure that holds scaphandre measures
+/// A Scaphandre data point (measure).
+/// 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Measure {
@@ -19,7 +22,9 @@ pub struct Measure {
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Host {
+    /// Power usage of the host (in microWatts)
     pub consumption: f32,
+    /// Timestamp of the measure
     pub timestamp: f64,
 }
 
@@ -28,11 +33,14 @@ pub struct Host {
 pub struct Consumer {
     pub exe: PathBuf,
     pub pid: i64,
+    /// Power usage of the process (in microWatts)
     pub consumption: f32,
+    /// Timestamp of the measure
     pub timestamp: f64,
 }
 
-/// Extracts Scaphandre measures from a scaphandre output file (json)
+/// Extracts Scaphandre measures from a Scaphandre json file
+/// 
 pub fn read_scaph_file(scaphandre_json_file: &PathBuf) -> ScaphandreMeasures {
     //dbg!("Reading scaphandre file {:?}", scaphandre_json_file);
     let file = File::open(scaphandre_json_file).expect("file not found");
@@ -40,7 +48,7 @@ pub fn read_scaph_file(scaphandre_json_file: &PathBuf) -> ScaphandreMeasures {
     results
 }
 
-/// Returns the average (arithmetic mean) value of all elements
+/// Returns the average (arithmetic mean) value of all elements of a vector
 fn average(data: Vec<f32>) -> Option<f32> {
     let sum = data.iter().sum::<f32>() as f32;
     let count = data.len();
@@ -50,7 +58,10 @@ fn average(data: Vec<f32>) -> Option<f32> {
         _ => None,
     }
 }
-/// Calculate the average consumption of a given process name
+/// Calculate the average consumption of a given process.
+/// 
+/// * Process are filtered on name
+/// 
 pub fn average_consumption(scaphandre_json_file: &PathBuf, process_name: &str) -> f32 {
     println!(
         "Calculating average consumption of process[{}] from file[{:?}]",
@@ -68,12 +79,16 @@ pub fn average_consumption(scaphandre_json_file: &PathBuf, process_name: &str) -
     }
     match average(consumptions) {
         Some(res) => res,
-        None => panic!("Cannot calculate mean consumption"),
+        None => panic!("Cannot calculate average consumption"),
     }
 }
 
-/// Extract the total duration of a given process by reading the scaphandre json output
-/// and calculating the difference between the first and last time the process is seen.
+/// Extract the total duration of a process 
+/// 
+/// * Duration is obtained by reading the scaphandre json output, filtering on process name,
+/// and calculating the difference between the last and first timestamps of the process.
+/// * returns 0 if process cannot be found
+/// 
 pub fn process_duration_seconds(scaphandre_json_file: &PathBuf, process_name: &str) -> f32 {
     println!(
         "Extracting duration consumption of process: {} from file[{:?}]",
@@ -94,7 +109,8 @@ pub fn process_duration_seconds(scaphandre_json_file: &PathBuf, process_name: &s
             }
         }
     }
-
+    // FIXME: handle the case where process can never be found
+    // FIXME: what happens the process appears only once ?
     (last_timestamp - first_timestamp) as f32
 }
 

@@ -20,11 +20,11 @@ use clap::Parser;
 #[clap(author, version, about, long_about = None)]
 struct Args {
     /// Name of the scaphandre input file
-    #[clap(short, long)]
+    #[clap(short, long, parse(from_os_str))]
     input_file: PathBuf,
 
     /// Name of the carbon crush file to generate
-    #[clap(short, long)]
+    #[clap(short, long, parse(from_os_str))]
     output_file: PathBuf,
 
     /// The process name to filter
