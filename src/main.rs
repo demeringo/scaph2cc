@@ -1,11 +1,19 @@
-mod cc_format;
-use crate::cc_format::*;
+//! # scaph2cc
+//!
+//! `scaph2cc` a small CLI that allows converting Scaphandre output to CarbonCrush API input format.
+//!
+//! `scaph2cc` filters the Scaphandre JSON output to aggregate measures on specific processes
+//! and add some context information (extracted from CLI options) about the current build
+//! context.  
 
-mod scaph_reader;
+mod carboncrush_exporter;
+use crate::carboncrush_exporter::*;
+
+mod scaphandre_reader;
 
 use clap::Parser;
 
-/// Filter Scaphandre json report on a specific process name and convert it to carbon crush json format
+/// The arguments of scap2cc CLi
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
@@ -38,25 +46,26 @@ struct Args {
     commit_sha: String,
 }
 
+/// scaph2cc CLI, used to filter scaphandre data and upload it to CarbonCrush API.
 fn main() {
     let args = Args::parse();
     let app_id = args.app_id.as_str();
     let branch = args.branch.as_str();
     let pipeline_url = args.ci_pipeline_url.as_str();
-    let scaph_filename = args.input_file.as_str();
-    let cc_filename = args.output_file.as_str();
+    let scaphandre_json_file = args.input_file.as_str();
+    let carboncrush_json_file = args.output_file.as_str();
     let process_name = args.process_name.as_str();
     let commit_sha = args.commit_sha.as_str();
 
-    let average_consumption = scaph_reader::average_consumption(scaph_filename, process_name);
-    let duration = scaph_reader::process_duration_seconds(scaph_filename, process_name);
+    let average_consumption = scaphandre_reader::average_consumption(scaphandre_json_file, process_name);
+    let duration = scaphandre_reader::process_duration_seconds(scaphandre_json_file, process_name);
 
     let total_energy = average_consumption * duration;
     println!(
         "Done. Average consumption: {}, Duration: {}, Total energy: {}",
         average_consumption, duration, total_energy
     );
-    let carbon_crush_results = build_cc_result(
+    let carbon_crush_result = build_carboncrush_result(
         average_consumption,
         app_id,
         branch,
@@ -65,5 +74,5 @@ fn main() {
         total_energy,
         duration,
     );
-    save_cc_file(carbon_crush_results, cc_filename);
+    save_carboncrush_file(carbon_crush_result, carboncrush_json_file);
 }
