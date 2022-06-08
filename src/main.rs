@@ -19,7 +19,7 @@ use clap::Parser;
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
-    /// Name of the scaphandre input file
+    /// Name of the scaphandre result file to use as input
     #[clap(short, long, parse(from_os_str))]
     input_file: PathBuf,
 
@@ -27,7 +27,11 @@ struct Args {
     #[clap(short, long, parse(from_os_str))]
     output_file: PathBuf,
 
-    /// The process name to filter
+    /// Name of the junit report to generate
+    #[clap(short, long, parse(from_os_str), default_value = "carboncrush-report.xml")]
+    junit_report_file: PathBuf,
+
+    /// The name of the process to filter
     #[clap(short, long)]
     process_name: String,
 
@@ -35,7 +39,7 @@ struct Args {
     #[clap(short, long)]
     app_id: String,
 
-    /// Name of the carbon crush file to generate
+    /// Name of the current branch
     #[clap(short, long)]
     branch: String,
 
@@ -56,6 +60,7 @@ fn main() {
     let pipeline_url = args.ci_pipeline_url.as_str();
     let scaphandre_json_file = args.input_file;
     let carboncrush_json_file = args.output_file;
+    let junit_report = args.junit_report_file;
     let process_name = args.process_name.as_str();
     let commit_sha = args.commit_sha.as_str();
 
@@ -77,5 +82,7 @@ fn main() {
         total_energy,
         duration,
     );
-    save_carboncrush_file(carbon_crush_result, carboncrush_json_file);
+    save_carboncrush_file(&carbon_crush_result, carboncrush_json_file);
+
+    save_as_junit_report(&carbon_crush_result, junit_report);
 }
