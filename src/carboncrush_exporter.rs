@@ -152,7 +152,7 @@ mod tests {
             10.0,
         );
         let mut junit_report: PathBuf = PathBuf::new();
-        junit_report.push("cc_junit_report.xml");
+        junit_report.push("tests/carbon-crush-report.xml");
         save_as_junit_report(&carboncrush_result, junit_report);
     }
 }

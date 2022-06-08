@@ -28,7 +28,7 @@ struct Args {
     output_file: PathBuf,
 
     /// Name of the junit report to generate
-    #[clap(short, long, parse(from_os_str))]
+    #[clap(short, long, parse(from_os_str), default_value = "carboncrush-report.xml")]
     junit_report_file: PathBuf,
 
     /// The name of the process to filter

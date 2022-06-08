@@ -4,7 +4,7 @@ A small utility to filter and convert ⚡ [Scaphandre](https://github.com/hubblo
 
 ## Usage
 
-The CLI expects that you provide:
+Invoke scaph2CC through command line. It expects the following parameters:
 
 - the scaphandre json analysis file as input
 - the name of the file to be generated
@@ -15,20 +15,19 @@ The CLI expects that you provide:
   - url of the current ci pipeline
   - commit id
 
-It returns a json summary file that can be ingested by CarbonCrush API and a junit test report.
+Scaph2CC returns a json summary file that can be ingested by CarbonCrush API and a junit test report.
 
 ```bash
-cargo run -- -i tests/scaphandre-full-report.json -o tests/carbon-crush-data.json --junit-report-file junit-report.xml --app-id myapp-123 --branch master --ci-pipeline-url "http://ci.com/master/123456" --process-name stress-ng --commit-sha d50e3b5ed5c27a848008abd5beb3d9e6c37c3f33
+cargo run -- -i tests/scaphandre-full-report.json -o tests/carboncrush-data.json --junit-report-file tests/carboncrush-report.xml --app-id myapp-123 --branch master --ci-pipeline-url "http://ci.com/master/123456" --process-name stress-ng --commit-sha d50e3b5ed5c27a848008abd5beb3d9e6c37c3f33
 ```
 
 ```bash
-
-scaph2cc 0.2.0
+scaph2cc 0.0.5
 Olivier de Meringo <demeringo@gmail.com>
 The arguments of scap2cc CLi
 
 USAGE:
-    scaph2cc --input-file <INPUT_FILE> --output-file <OUTPUT_FILE> --junit-report-file <JUNIT_REPORT_FILE> --process-name <PROCESS_NAME> --app-id <APP_ID> --branch <BRANCH> --ci-pipeline-url <CI_PIPELINE_URL> --commit-sha <COMMIT_SHA>
+    scaph2cc [OPTIONS] --input-file <INPUT_FILE> --output-file <OUTPUT_FILE> --process-name <PROCESS_NAME> --app-id <APP_ID> --branch <BRANCH> --ci-pipeline-url <CI_PIPELINE_URL> --commit-sha <COMMIT_SHA>
 
 OPTIONS:
     -a, --app-id <APP_ID>
@@ -47,7 +46,7 @@ OPTIONS:
             Name of the scaphandre result file to use as input
 
     -j, --junit-report-file <JUNIT_REPORT_FILE>
-            Name of the junit report to generate
+            Name of the junit report to generate [default: carboncrush-report.xml]
 
     -o, --output-file <OUTPUT_FILE>
             Name of the carbon crush file to generate
@@ -59,7 +58,6 @@ OPTIONS:
             ci pipeline URL
 
     -V, --version
-            Print version information
 ```
 
 ### Carbon Crush input Format

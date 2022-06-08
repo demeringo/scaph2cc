@@ -15,3 +15,4 @@
 /target
 .vscode/settings.json
 test-generated-result.json
+test/carboncrush-report.xml

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Power measure" tests="1" failures="0" errors="0">
+    <testsuite name="myapp1" tests="1" disabled="0" errors="0" failures="0">
+        <testcase name="d50e3b5ed5c27a848008abd5beb3d9e6c37c3f33">
+            <system-out>CarbonCrushResult { consumption: &quot;123&quot;, app_id: &quot;myapp1&quot;, duration: &quot;10&quot;, branch: &quot;main&quot;, commit_sha: &quot;d50e3b5ed5c27a848008abd5beb3d9e6c37c3f33&quot;, energy: &quot;1230&quot;, ci_pipeline_url: &quot;http://whatever/job/123&quot; }</system-out>
+        </testcase>
+    </testsuite>
+</testsuites>
