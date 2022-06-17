@@ -28,7 +28,12 @@ struct Args {
     output_file: PathBuf,
 
     /// Name of the junit report to generate
-    #[clap(short, long, parse(from_os_str), default_value = "carboncrush-report.xml")]
+    #[clap(
+        short,
+        long,
+        parse(from_os_str),
+        default_value = "carboncrush-report.xml"
+    )]
     junit_report_file: PathBuf,
 
     /// The name of the process to filter
@@ -64,24 +69,25 @@ fn main() {
     let process_name = args.process_name.as_str();
     let commit_sha = args.commit_sha.as_str();
 
-    let average_consumption =
-        scaphandre_reader::average_consumption(&scaphandre_json_file, process_name);
-    let duration = scaphandre_reader::process_duration_seconds(&scaphandre_json_file, process_name);
+    let average_power_microwatts =
+        scaphandre_reader::average_consumption_microwatt(&scaphandre_json_file, process_name);
+    let duration_s =
+        scaphandre_reader::process_duration_seconds(&scaphandre_json_file, process_name);
 
-    let total_energy = average_consumption * duration;
-    println!(
-        "Done. Average consumption: {}, Duration: {}, Total energy: {}",
-        average_consumption, duration, total_energy
-    );
     let carbon_crush_result = build_carboncrush_result(
-        average_consumption,
+        average_power_microwatts,
         app_id,
         branch,
         commit_sha,
         pipeline_url,
-        total_energy,
-        duration,
+        duration_s,
     );
+
+    println!(
+        "Done. Average consumption (uW): {}, Duration (s): {}, Total energy (uWs): {}, Total energy (Wh): {}",
+        average_power_microwatts, duration_s, carbon_crush_result.energy, carbon_crush_result.energy_watthours
+    );
+
     save_carboncrush_file(&carbon_crush_result, carboncrush_json_file);
 
     save_as_junit_report(&carbon_crush_result, junit_report);

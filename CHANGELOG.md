@@ -6,7 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - ReleaseDate
 
+## [0.1.0] - 2022-06-17
+
+### Added
+
+- A new `energyWatthours` field is added to the generated json result. It contains the energy value in Watt-hours. The previously existing field (`energy`) is kept but should not be used because its unit is unpractical (microWatts-second).
+
 ## [0.0.5] - 2022-06-08
+
 ### Added
 
 - Generate a junit report (xml format). Adds a `--junit-report-file` parameter to pass the name of the report to generate (without parameter, default to `carboncrush-report.xml`)

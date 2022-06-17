@@ -2,7 +2,7 @@
 authors = ["Olivier de Meringo <demeringo@gmail.com>"]
 edition = "2021"
 name = "scaph2cc"
-version = "0.0.5"
+version = "0.1.0"
 [dependencies]
 quick-junit = "0.1.5"
 serde_json = "1.0.60"

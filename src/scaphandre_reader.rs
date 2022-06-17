@@ -58,11 +58,11 @@ fn average(data: Vec<f32>) -> Option<f32> {
         _ => None,
     }
 }
-/// Calculate the average consumption of a given process.
+/// Calculate the average consumption of a given process (in micro Watts)
 ///
 /// * Process are filtered on name
 ///
-pub fn average_consumption(scaphandre_json_file: &PathBuf, process_name: &str) -> f32 {
+pub fn average_consumption_microwatt(scaphandre_json_file: &PathBuf, process_name: &str) -> f32 {
     println!(
         "Calculating average consumption of process[{}] from file[{:?}]",
         process_name, scaphandre_json_file
@@ -83,7 +83,7 @@ pub fn average_consumption(scaphandre_json_file: &PathBuf, process_name: &str) -
     }
 }
 
-/// Extract the total duration of a process
+/// Extract the total duration of a process (in seconds)
 ///
 /// * Duration is obtained by reading the scaphandre json output, filtering on process name,
 /// and calculating the difference between the last and first timestamps of the process.
@@ -169,7 +169,7 @@ mod tests {
         let scaphandre_json_file = PathBuf::from("./tests/scaphandre-full-report.json");
         let process_name = "stress-ng";
 
-        let res: f32 = average_consumption(&scaphandre_json_file, process_name);
+        let res: f32 = average_consumption_microwatt(&scaphandre_json_file, process_name);
         assert_eq!(res, 7269277.5 as f32);
     }
 
@@ -178,7 +178,7 @@ mod tests {
         let scaphandre_json_file = PathBuf::from("./tests/scaphandre-simple-report.json");
         let process_name = "stress-ng";
 
-        let res: f32 = average_consumption(&scaphandre_json_file, process_name);
+        let res: f32 = average_consumption_microwatt(&scaphandre_json_file, process_name);
         assert_eq!(res, 7867854.0 as f32);
     }
 
