@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - ReleaseDate
 
+## [0.1.1] - 2023-08-08
+
+- Add an option to pass pid on command line (not implemented yet).
+
 ## [0.1.0] - 2022-06-17
 
 ### Added

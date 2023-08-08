@@ -15,7 +15,7 @@ mod scaphandre_reader;
 
 use clap::Parser;
 
-/// The arguments of scap2cc CLi
+/// The arguments of scaph2cc CLi
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
@@ -37,8 +37,12 @@ struct Args {
     junit_report_file: PathBuf,
 
     /// The name of the process to filter
-    #[clap(short, long)]
+    #[clap(short = 'n', long)]
     process_name: String,
+
+      /// The pid of the process to filter
+      #[clap(short = 'p', long)]
+      process_id: String,
 
     /// Carbon crush app id
     #[clap(short, long)]
